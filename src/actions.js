@@ -29,9 +29,9 @@ export const startLoadingPosts = () => {
     fetch('/api/posts')
       .then(response => {
         if (!response.ok)
-          throw `Server returned ${response.status}`
+          throw new Error(`Server returned ${response.status}`)
         else if (response.headers.get('content-type').indexOf("application/json")===-1)
-          throw `Server returned non-JSON data (${response.headers.get('content-type')})`
+          throw new Error(`Server returned non-JSON data (${response.headers.get('content-type')})`)
         else
           return response.json()
       })
@@ -96,9 +96,9 @@ export const continueQuery = (queryString, count=1, loaded=0) => {
         response =>  {
           //should test for status code and dispatch an error for failing codes
           if (!response.ok)
-            throw `Server returned ${response.status}`
+            throw new Error(`Server returned ${response.status}`)
           else if (response.headers.get('content-type').indexOf("application/json")===-1)
-            throw `Server returned non-JSON data (${response.headers.get('content-type')})`
+            throw new Error(`Server returned non-JSON data (${response.headers.get('content-type')})`)
           else
             return response.json()
         },

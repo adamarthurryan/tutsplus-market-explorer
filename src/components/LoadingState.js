@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import {connect} from 'react-redux'
 
-import {STATE_LOADING, STATE_EMPTY, STATE_ERROR, STATE_DONE} from '../reducers'
+import {STATE_LOADING, STATE_ERROR, STATE_DONE} from '../reducers'
 
 //map the input props to this component's props
 //also mix in the currently calculated q-value

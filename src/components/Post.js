@@ -1,7 +1,6 @@
 
 import React, { Component } from 'react';
 import {connect} from 'react-redux'
-import {Link} from 'react-router-dom'
 
 import VirtualizedTable from './VirtualizedTable'
 
@@ -25,7 +24,7 @@ class Post extends Component {
         const items = post.market_items.map(itemId => this.props.items.find(item => item.id === itemId)).filter(item => item)
 
         return <div >
-          <h3>{post.title} <a target="_blank" href={post.url}>&rarr; tutsplus</a></h3>
+          <h3>{post.title} <a rel="noopener noreferrer" target="_blank" href={post.url}>&rarr; tutsplus</a></h3>
           <p><strong>Publication Date: </strong>{post.publication_date}</p>
           <p><strong>Author: </strong>{post.author}</p>
 
@@ -33,7 +32,7 @@ class Post extends Component {
 
           <VirtualizedTable fields={fields} data={items}/>
           
-          {post.market_items.length!=items.length ? 
+          {post.market_items.length !== items.length ? 
             <div><em>And {post.market_items.length - items.length} others...</em></div>
             : null
           }
