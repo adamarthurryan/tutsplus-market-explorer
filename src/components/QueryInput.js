@@ -11,7 +11,7 @@ const mapStateToProps = state =>
   )
 
 const mapDispatchToProps = dispatch => ({
-  onUpdateQuery: input => dispatch(Actions.updateQuery(input)),
+  onUpdateQuery: site => dispatch(Actions.updateQuerySite(site)),
   onRunQuery: item => {
       //and run the query
       dispatch(Actions.startQuery())
@@ -34,9 +34,19 @@ class QueryInput extends Component {
     	return (
         <div className="ui form">
     		  <div className="inline fields">
-            <label>Query String</label>
+            <label>Site</label>
             <div className="field">
-              <input type="text" value={this.props.query.string} onChange={this.handleQueryChange.bind(this)} placeholder="Query string..."/>
+              <select className="ui fluid search dropdown" value={this.props.query.site} onChange={this.handleQueryChange.bind(this)}>
+                <option value="">All</option>
+                <option value="codecanyon.net">CodeCanyon</option>
+                <option value="graphicriver.net">GraphicRiver</option>
+                <option value="themeforest.net">ThemeForest</option>
+                <option value="audiojungle.net">AudioJungle</option>
+                <option value="photodune.net">PhotoDune</option>
+                <option value="videohive.net">VideoHive</option>
+                <option value="3docean.net">3dOcean</option>
+              </select>
+
             </div>
             <div className="field">
               <button onClick={this.handleRunQuery.bind(this)}>Run Query</button>

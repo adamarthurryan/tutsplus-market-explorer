@@ -2,6 +2,7 @@
   "name": "tutsplus-market-explorer",
   "version": "0.1.0",
   "private": true,
+  "proxy": "http://localhost:8080",
   "dependencies": {
     "apicache": "^1.2.3",
     "dateformat": "^3.0.3",

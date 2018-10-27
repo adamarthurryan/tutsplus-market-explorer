@@ -49,7 +49,7 @@ class VirtualizedTable extends Component {
                             key={field}
                             flexGrow={1}
                             maxWidth={500}
-                            minWidth={50}
+                            minWidth={25}
                             width={
                                 (fieldParams[field] && fieldParams[field].width) ? 
                                 fieldParams[field].width : 100

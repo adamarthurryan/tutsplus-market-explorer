@@ -11,7 +11,7 @@ export default {
 	classification: categoryParams , 
 	price_dollars: {label: "Price", width: 60, render: cellData=> `$${cellData}`}, 
 	trending: {label: "Trend?", width: 60, render: cellData=> cellData ? "Yes": ""}, 
-	updated_at_date: {label: "Updated At"},
+	updated_at_date: {label: "Updated"},
 
 	category : categoryParams, 
 	tag: {label:"Tag", render: cellData => (<Link to={`/tags/${cellData}`}>{cellData}</Link>)},
@@ -23,7 +23,20 @@ export default {
 	promotions: {label: "Promotion", render: (cellData) => cellData ?
 		<Link to={`/posts/${cellData[0].id}`}>{cellData[0].publication_date}</Link>
 		: ""
-	}
+	},
+	site: {label: " ", width: 25, render: (cellData) => {
+		switch(cellData) {
+			case "themeforest.net": return "tf"
+			case "codecanyon.net": return "cc"
+			case "graphicriver.net": return "gr"
+			case "videohive.net": return "vh"
+			case "photodune.net": return "ph"
+			case "3docean.net": return "3d"
+			case "audiojungle.net": return "aj"
+			default: return cellData
+		}
+	}},
+	tuts_site: {label: "site", width: 60, render: (cellData) => cellData.match(/^[^.]*/)[0] }
 
 }
 

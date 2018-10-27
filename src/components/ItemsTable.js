@@ -6,7 +6,7 @@ import {connect} from 'react-redux'
 //import {Autosizer, Table} from 'react-virtualized'
 import VirtualizedTable from './VirtualizedTable'
 
-const fields = ['name', 'classification', 'price_dollars', 'number_of_sales', 'trending', 'updated_at_date', "promotions"]
+const fields = ['name', 'site', 'classification', 'price_dollars', 'number_of_sales', 'trending', 'updated_at_date', "promotions"]
 
 
 const mapStateToProps = state => 
@@ -47,8 +47,8 @@ class ItemsTable extends Component {
         }))
 
 		return <div>
-			{categoryPath ? <h4>Category: {categoryPath}</h4>: null}
-			{this.props.match.params.tag ? <h4>Tag: {this.props.match.params.tag}</h4>: null}
+			{categoryPath ? <h3>Category: {categoryPath}</h3>: null}
+			{this.props.match.params.tag ? <h3>Tag: {this.props.match.params.tag}</h3>: null}
 			<VirtualizedTable fields={fields} data={itemsWithPromotions}/>
 		</div>
     }

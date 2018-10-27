@@ -1,3 +1,5 @@
+const fs = require('fs')
+const path = require('path')
 
 
 const ENVATO_API_SECRET = require("./envato-secret.js")
@@ -14,15 +16,11 @@ const bodyParser = require('body-parser')
 const basicAuth = require('express-basic-auth')
 
 const Papa = require('papaparse')
-const fs = require('fs')
-
 const app = express()
-const port = 3001
+const port = 8080
 
 const POSTS_DATABASE = 'data/posts.csv'
 
-//this is just a gateway to the envato api
-//not very secure! 
 
 //let's add some basic auth
 app.use(basicAuth({
@@ -35,7 +33,10 @@ app.use(basicAuth({
 app.use(bodyParser.json()); 
 
 
-//this is 0% error tolerant
+//this is just a gateway to the envato api
+//not very secure!
+//it should only pass on recognized parameters to the api 
+//also this is 0% error tolerant
 app.get('/api/items', cache('6 hours'), function (req, res) {
 
 	//params are decoded from request into req.params
@@ -56,14 +57,18 @@ app.get('/api/items', cache('6 hours'), function (req, res) {
 
 //return posts with market promos
 app.get('/api/posts', function (req, res) {
-//	res.setHeader('Content-Type', 'application/json');
 	res.send(posts)
 })
 
 //in dev mode, we just proxy the dev server
 //in production mode, we should serve the static assets instead
-app.all('*', proxy('localhost:3000'))
+//app.all('*', proxy('localhost:3000'))
 
+app.use(express.static('build'));
+
+app.get('*', function (req,res) {
+  res.sendFile(path.join(__dirname, '../build/index.html'))
+}) //express.static('build'))
 
 
 app.listen(port, () => console.log(`API app listening on port ${port}!`))

@@ -41,11 +41,11 @@ export function view (state, action) {
 
 export function query(state, action) {
   switch (action.type) {
-    case 'update_query_string': 
-      return Object.assign({}, state, {string:action.data})
+    case 'update_query_site': 
+      return Object.assign({}, state, {site:action.data})
 
     default:
-      return state || {tab:""}
+      return state || {site: ''}
   }
 }
 

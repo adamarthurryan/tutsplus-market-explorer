@@ -24,7 +24,7 @@ class Item extends Component {
         let postFields = ['title','publication_date','author']
 
         return <div >
-          <h3>{item.name} <a rel="noopener noreferrer" target="_blank" href={item.url}>&rarr; envato market</a></h3>
+          <h3>{item.name} <a rel="noopener noreferrer" target="_blank" href={item.url}>&rarr;{item.site}</a></h3>
           <p><strong>Author: </strong>{item.author_username}</p>
           <p><strong>Rating: </strong>{item.rating.rating} from {item.rating.count} users</p>
           <p><strong>Trending? </strong>{item.trending ? "Yes" : "No"}</p>

@@ -6,7 +6,7 @@ import {connect} from 'react-redux'
 //import {Autosizer, Table} from 'react-virtualized'
 import VirtualizedTable from './VirtualizedTable'
 
-const fields = ['title','publication_date','author']
+const fields = ['title','tuts_site', 'publication_date','author']
 
 
 const mapStateToProps = state => 

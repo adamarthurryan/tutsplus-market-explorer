@@ -2,7 +2,9 @@
 import {searchForItems} from './util/envatoAPI' 
 import dateFormat from 'dateformat'
 
-export const updateQuery = (string) => ({type: 'update_query_string', data:string})
+//export const updateQuery = (string) => ({type: 'update_query_string', data:string})
+
+export const updateQuerySite = (site) => ({type: 'update_query_site', data: site})
 export const changeTab = (tab) => ({type: 'change_tab', data:tab})
 
 export const addItems = (items) => ({type: 'add_items', data:items})
@@ -36,13 +38,19 @@ export const startLoadingPosts = () => {
           return response.json()
       })
       .then(posts => {
-        posts = posts.map(post => Object.assign(post, {
-            id: post.url.match(/cms-\d+/)[0],
+        posts = posts.map(post => {
+          const idMatch = post.url.match(/[a-z]+-\d+$/)
+          const siteMatch = post.url.match(/https?:\/\/([^/]+)\//)
+
+          return Object.assign(post, {
+            id: idMatch[0],
+            tuts_site: siteMatch[1],
             publication_date: dateFormat(Date.parse(post.publication_date), 'yyyy-mm-dd'),
             market_items: typeof post.market_items === "string" ? 
               post.market_items.split(",").map(str => parseInt(str)) : [post.market_items]
-          }
-        ))
+            }
+          )
+        })
         posts = posts.sort((a,b) => b.publication_date.localeCompare(a.publication_date))
 
         dispatch(loadingPosts(posts.length, posts.length))
@@ -51,6 +59,7 @@ export const startLoadingPosts = () => {
       })
       .catch(error => {
         dispatch(errorLoadingPosts(error))
+        console.log(error)
       })
   }
 
@@ -77,17 +86,18 @@ export const startQuery = () => {
     // This is not required by thunk middleware, but it is convenient for us.
 
 
-    const queryString = getState().query.string
-
-    dispatch(continueQuery(queryString, MAX_QUERY_PAGES))
+    dispatch(continueQuery(1))
 
   }
 }
 
-export const continueQuery = (queryString, count=1, loaded=0) => {
+export const continueQuery = (page=1, loaded=0) => {
   return function (dispatch, getState) {
-   
-    return searchForItems(queryString)
+    
+    const querySite = getState().query.site
+
+
+    return searchForItems(querySite, page)
       .then(response => {
         return response
       })
@@ -99,8 +109,9 @@ export const continueQuery = (queryString, count=1, loaded=0) => {
             throw new Error(`Server returned ${response.status}`)
           else if (response.headers.get('content-type').indexOf("application/json")===-1)
             throw new Error(`Server returned non-JSON data (${response.headers.get('content-type')})`)
-          else
+          else {
             return response.json()
+          }
         },
 
         // Do not use catch, because that will also catch
@@ -109,6 +120,7 @@ export const continueQuery = (queryString, count=1, loaded=0) => {
         // https://github.com/facebook/react/issues/6895
         error => {
           dispatch(errorLoadingItems(error))
+          console.log(error)
         }
       )
       .then(json => {
@@ -116,9 +128,8 @@ export const continueQuery = (queryString, count=1, loaded=0) => {
         dispatch(loadingItems(loaded, json.total_hits))
         dispatch(addItems(json.matches))
 
-        if (json.links.next_page_url && count > 0) {
-          const nextQueryString = json.links.next_page_url.match(/\?(.*)/)[1]
-          dispatch(continueQuery(nextQueryString, count-1, loaded))
+        if (json.links.next_page_url && page < MAX_QUERY_PAGES) {
+          dispatch(continueQuery(page+1, loaded))
         }
         else {
           dispatch(doneLoadingItems())
