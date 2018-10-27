@@ -1,5 +1,6 @@
 
 import {searchForItems} from './util/envatoAPI' 
+import dateFormat from 'dateformat'
 
 export const updateQuery = (string) => ({type: 'update_query_string', data:string})
 export const changeTab = (tab) => ({type: 'change_tab', data:tab})
@@ -7,10 +8,53 @@ export const changeTab = (tab) => ({type: 'change_tab', data:tab})
 export const addItems = (items) => ({type: 'add_items', data:items})
 export const clearItems = () => ({type: 'clear_items'})
 
+export const addPosts = (posts) => ({type: 'add_posts', data:posts})
+export const clearPosts = () => ({type: 'clear_posts'})
+
 export const loadingItems = (loaded, total) => ({type: 'loading_items', data:{loaded, total}})
 export const doneLoadingItems = () => ({type: 'done_loading_items'})
 export const errorLoadingItems = (error) => ({type: 'error_loading_items', data: error})
 
+export const loadingPosts = (loaded, total) => ({type: 'loading_posts', data:{loaded, total}})
+export const doneLoadingPosts = () => ({type: 'done_loading_posts'})
+export const errorLoadingPosts = (error) => ({type: 'error_loading_posts', data: error})
+
+
+export const startLoadingPosts = () => {
+
+  return function (dispatch) {
+    dispatch(clearPosts())
+    dispatch(loadingPosts(0,0))
+
+    fetch('/api/posts')
+      .then(response => {
+        if (!response.ok)
+          throw `Server returned ${response.status}`
+        else if (response.headers.get('content-type').indexOf("application/json")===-1)
+          throw `Server returned non-JSON data (${response.headers.get('content-type')})`
+        else
+          return response.json()
+      })
+      .then(posts => {
+        posts = posts.map(post => Object.assign(post, {
+            id: post.url.match(/cms-\d+/)[0],
+            publication_date: dateFormat(Date.parse(post.publication_date), 'yyyy-mm-dd'),
+            market_items: typeof post.market_items === "string" ? 
+              post.market_items.split(",").map(str => parseInt(str)) : [post.market_items]
+          }
+        ))
+        posts = posts.sort((a,b) => b.publication_date.localeCompare(a.publication_date))
+
+        dispatch(loadingPosts(posts.length, posts.length))
+        dispatch(addPosts(posts))
+        dispatch(doneLoadingPosts())
+      })
+      .catch(error => {
+        dispatch(errorLoadingPosts(error))
+      })
+  }
+
+}
 
 const MAX_QUERY_PAGES = 100
 
@@ -51,7 +95,12 @@ export const continueQuery = (queryString, count=1, loaded=0) => {
 
         response =>  {
           //should test for status code and dispatch an error for failing codes
-          return response.json()
+          if (!response.ok)
+            throw `Server returned ${response.status}`
+          else if (response.headers.get('content-type').indexOf("application/json")===-1)
+            throw `Server returned non-JSON data (${response.headers.get('content-type')})`
+          else
+            return response.json()
         },
 
         // Do not use catch, because that will also catch
@@ -68,7 +117,6 @@ export const continueQuery = (queryString, count=1, loaded=0) => {
         dispatch(addItems(json.matches))
 
         if (json.links.next_page_url && count > 0) {
-          console.log(json.links.next_page_url)
           const nextQueryString = json.links.next_page_url.match(/\?(.*)/)[1]
           dispatch(continueQuery(nextQueryString, count-1, loaded))
         }

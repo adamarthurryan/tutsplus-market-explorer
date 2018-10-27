@@ -46,6 +46,7 @@ class VirtualizedTable extends Component {
                 >
                     {this.props.fields.map(field => {
                         return <Column
+                            key={field}
                             flexGrow={1}
                             maxWidth={500}
                             minWidth={50}

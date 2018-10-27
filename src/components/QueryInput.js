@@ -30,12 +30,19 @@ class QueryInput extends Component {
 
     render() {
 
+
     	return (
-    		<div className="ui transparent icon input">
+        <div className="ui form">
+    		  <div className="inline fields">
+            <label>Query String</label>
+            <div className="field">
               <input type="text" value={this.props.query.string} onChange={this.handleQueryChange.bind(this)} placeholder="Query string..."/>
-              <button onClick={this.handleRunQuery.bind(this)}>Run Query</button>
-              <p>{this.props.itemsLoader.loaded} / {this.props.itemsLoader.total}</p>
             </div>
+            <div className="field">
+              <button onClick={this.handleRunQuery.bind(this)}>Run Query</button>
+            </div>
+          </div>
+        </div>
 
     	)
     }
