@@ -1,5 +1,4 @@
 
-import {searchForItems} from './util/envatoAPI' 
 import dateFormat from 'dateformat'
 
 //export const updateQuery = (string) => ({type: 'update_query_string', data:string})
@@ -65,8 +64,49 @@ export const startLoadingPosts = () => {
 
 }
 
-const MAX_QUERY_PAGES = 100
+export const startLoadingItems = () => {
 
+
+  return function (dispatch, getState) {
+    const querySite = getState().query.site
+
+    const queryString = "/api/items"+(querySite ? `?site=${querySite}`: "")
+
+    dispatch(clearItems())
+    dispatch(loadingItems(0,0))
+
+    fetch(queryString)
+      .then(response => {
+        if (!response.ok)
+          throw new Error(`Server returned ${response.status}`)
+        else if (response.headers.get('content-type').indexOf("application/json")===-1)
+          throw new Error(`Server returned non-JSON data (${response.headers.get('content-type')})`)
+        else
+          return response.json()
+      })
+      .then(items => {
+        items = items.map(item => {
+
+          return Object.assign(item, {
+            price_dollars: item.price_cents/100,
+            tags: item.tags ? item.tags.split(",") : []
+          })
+        })
+        items = items.sort((a,b) => b.sales-a.sales)
+
+        dispatch(loadingItems(items.length, items.length))
+        dispatch(addItems(items))
+        dispatch(doneLoadingItems())
+      })
+      .catch(error => {
+        dispatch(errorLoadingItems(error))
+        console.log(error)
+      })
+  }
+
+}
+
+/*
 export const startQuery = () => {
   // Thunk middleware knows how to handle functions.
   // It passes the dispatch and getState methods as arguments to the function,
@@ -137,4 +177,4 @@ export const continueQuery = (page=1, loaded=0) => {
         //now we are going to process the results and update the app state
       })
   }
-}
+}*/

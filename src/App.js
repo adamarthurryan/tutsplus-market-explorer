@@ -23,7 +23,7 @@ class App extends Component {
 
       <div className="ui container">
 
-        <h1 className="ui header main-header">Market Explorer</h1>
+        <h1 className="ui header left floated main-header">Market Explorer</h1>
 
         <div className="ui basic right floated right aligned segment">
           <div>

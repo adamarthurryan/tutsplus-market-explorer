@@ -10,12 +10,13 @@ const papaOptions = {
 	header: true
 }
 
+const {delay, fetchWithRetry, fetchUrls} = require('./scraper')
+
 
 const NUM_PAGES = 500
 const BASE_URL = "https://tutsplus.com/tutorials"
-const PAGE_DELAY = 100
 
-const OUTPUT_FILE = "./data/posts.csv"
+const OUTPUT_FILE = "../data/posts.csv"
 
 const ITEM_LINK_REGEX = /https:\/\/(codecanyon|photodune|themeforest|videohive|audiojungle|graphicriver|3docean).net\/item\/[^"'?]+/g
 const ITEM_REGEX = /\d+$/
@@ -37,7 +38,7 @@ function createOutput() {
 }
 
 function scrape() {
-	console.log(`Scraping ${NUM_PAGES} pages of posts with a ${PAGE_DELAY} ms delay`)
+	console.log(`Scraping ${NUM_PAGES} pages of posts`)
 
 	//populate an array with page suffixes which will be appended to the tutorials index page urls 
 	const indexPageSuffixes = Array(NUM_PAGES).fill().map((_, idx) => idx>1 ? `?page=${idx}` : "")
@@ -55,54 +56,7 @@ function scrape() {
 		)
 	)
 */
-	fetchPage(indexPageUrls, 0)
-}
-
-//fetch the pages in sequence
-async function fetchPage (urls, index) {
-	const url = urls[index]
-
-	fetchWithRetry(url)
-		.then(html => processIndexPage(html))
-		.then( () => (index < urls.length) ?
-			delay(PAGE_DELAY).then(() => fetchPage(urls, index+1))
-			: Promise.resolve()
-		)
-		.catch(error => console.log(`Fetch error: ${error}`))
-}
-
-
-async function fetchWithRetry(url) {
-	return fetch(url)
-		.then(response => {
-			if (response.ok)
-				return response.text()
-			else {
-				console.log(`Fetch received ${response.status} for ${url}`)
-				if (response.status === 429) {
-
-					let retryAfter = response.headers.has("retry-after") ? 
-						parseInt(response.headers.get("retry-after")) 
-						: 300
-					retryAfter += 1
-					console.log(`Retrying after ${retryAfter} seconds`)
-					return delay(retryAfter*1000).then(() => fetchWithRetry(url))
-				}
-				else if (response.status === 504) {
-					console.log("Gateway timeout, retrying in 10 seconds")
-					return delay(10*1000).then(() => fetchWithRetry(url))
-				}
-				else
-					return Promise.resolve()
-			}
-		})	
-}
-
-//from https://stackoverflow.com/questions/39538473/using-settimeout-on-promise-chain
-async function delay(t, v) {
-   return new Promise(function(resolve) { 
-       setTimeout(resolve.bind(null, v), t)
-   });
+	fetchPage(indexPageUrls, 0, processHtml)
 }
 
 

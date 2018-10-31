@@ -11,24 +11,21 @@ const mapStateToProps = state =>
   )
 
 const mapDispatchToProps = dispatch => ({
-  onUpdateQuery: site => dispatch(Actions.updateQuerySite(site)),
-  onRunQuery: item => {
+  updateQuerySite: site => dispatch(Actions.updateQuerySite(site)),
+  startLoadingItems: item => {
       //and run the query
-      dispatch(Actions.startQuery())
+      dispatch(Actions.startLoadingItems())
     }
 })
 
 class QueryInput extends Component {
 
  	handleQueryChange(event) {
-    	this.props.onUpdateQuery(event.target.value)
-  	}
+    	this.props.updateQuerySite(event.target.value)
+      this.props.startLoadingItems()
+  }
 
-	handleRunQuery() {
-		this.props.onRunQuery()
-	}
-
-    render() {
+  render() {
 
 
     	return (
@@ -46,10 +43,6 @@ class QueryInput extends Component {
                 <option value="videohive.net">VideoHive</option>
                 <option value="3docean.net">3dOcean</option>
               </select>
-
-            </div>
-            <div className="field">
-              <button onClick={this.handleRunQuery.bind(this)}>Run Query</button>
             </div>
           </div>
         </div>

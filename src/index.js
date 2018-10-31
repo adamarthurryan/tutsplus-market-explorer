@@ -44,14 +44,14 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => ({
   startLoadingPosts: () => dispatch(Actions.startLoadingPosts()),
-  startQuery: () => dispatch(Actions.startQuery())
+  startLoadingItems: () => dispatch(Actions.startLoadingItems())
 })
 
 
 class Root extends Component {
   componentWillMount() {
     this.props.startLoadingPosts()
-    this.props.startQuery()
+    this.props.startLoadingItems()
   }
 
   render() {

@@ -21,4 +21,6 @@ yarn-debug.log*
 yarn-error.log*
 
 
-server/envato-secret.js
+server/server-secret.js
+scraper/envato-secret.js
+data/items.csv

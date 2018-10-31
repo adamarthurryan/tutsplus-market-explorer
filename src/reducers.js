@@ -53,12 +53,8 @@ export function items (state, action) {
   switch (action.type) {
     
     case 'add_items':
-      //add some calculated fields to each item on intake
-      let newItems = action.data.map(item => Object.assign({},item,{
-        price_dollars: item.price_cents/100,
-        updated_at_date: item.updated_at.match(/\d\d\d\d-\d\d-\d\d/)[0]
-      })) 
-      return state.concat(newItems)
+      
+      return state.concat(action.data)
     case 'clear_items':
       return []
 
@@ -141,12 +137,17 @@ function updateSummary(id, currentSummary, item, idFieldName) {
   if (currentSummary == null)
     return {id: id, [idFieldName]: id, num_items: 1, number_of_sales: item.number_of_sales, avg_price_dollars: item.price_cents/100}
 
+
   return {
     id: id, 
     [idFieldName]: id,
     num_items: currentSummary.num_items+1,
     number_of_sales: currentSummary.number_of_sales+item.number_of_sales,
-    avg_price_dollars: (currentSummary.avg_price_dollars*currentSummary.num_items+(item.price_cents/100))/(currentSummary.num_items+1)
+
+//some items have anomolously high prices, ignore these
+    avg_price_dollars: (item.price_cents<1000*100 ?
+        (currentSummary.avg_price_dollars*currentSummary.num_items+(item.price_cents/100))/(currentSummary.num_items+1)
+        : currentSummary.avg_price_dollars)
   } 
 }
 
