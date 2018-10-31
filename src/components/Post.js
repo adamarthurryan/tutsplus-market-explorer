@@ -24,7 +24,7 @@ class Post extends Component {
         const items = post.market_items.map(itemId => this.props.items.find(item => item.id === itemId)).filter(item => item)
 
         return <div >
-          <h3>{post.title} <a rel="noopener noreferrer" target="_blank" href={post.url}>&rarr;{post.site}</a></h3>
+          <h3>{post.title} <a rel="noopener noreferrer" target="_blank" href={post.url}>&rarr;{post.tuts_site}</a></h3>
           <p><strong>Publication Date: </strong>{post.publication_date}</p>
           <p><strong>Author: </strong>{post.author}</p>
 
