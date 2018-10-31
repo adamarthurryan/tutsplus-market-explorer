@@ -13,7 +13,7 @@ class LoadingState extends Component {
 
     render() {
       const loadingStringRender = (loader) =>
-        ((loader.status === STATE_LOADING || loader.status === STATE_DONE)? ` ${loader.loaded} / ${loader.total}` : "") 
+        ((loader.status === STATE_LOADING || loader.status === STATE_DONE)? ` ${loader.loaded}` : "") 
         + ((loader.status === STATE_ERROR) ? `error ${loader.error}` : "") 
 
 
