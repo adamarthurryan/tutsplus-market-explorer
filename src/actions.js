@@ -92,7 +92,7 @@ export const startLoadingItems = () => {
             tags: item.tags ? item.tags.split(",") : []
           })
         })
-        items = items.sort((a,b) => b.sales-a.sales)
+        items = items.sort((a,b) => b.number_of_sales-a.number_of_sales)
 
         dispatch(loadingItems(items.length, items.length))
         dispatch(addItems(items))
