@@ -16,7 +16,7 @@ class Post extends Component {
     	const post = this.props.posts.find(post => post.id===postId)
 
 
-      const fields = ['name', 'classification', 'price_dollars', 'number_of_sales', 'trending', 'updated_at_date']
+      const fields = ['name', 'classification', 'price_dollars', 'number_of_sales', 'trending', 'updated_at']
 
 
 
@@ -33,7 +33,7 @@ class Post extends Component {
           <VirtualizedTable fields={fields} data={items}/>
           
           {post.market_items.length !== items.length ? 
-            <div><em>And {post.market_items.length - items.length} others...</em></div>
+            <div><em>And {post.market_items.length - items.length} others not in this database...</em></div>
             : null
           }
         </div>
