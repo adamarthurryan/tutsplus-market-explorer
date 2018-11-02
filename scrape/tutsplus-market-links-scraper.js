@@ -93,7 +93,10 @@ function processPost(post, html) {
 	let links = {}
 
 	linkElements.find('a').each((idx,linkElement) => {
-		const urlMatch = $(linkElement).attr('href').match(ITEM_LINK_REGEX)
+		const urlMatch = $(linkElement).attr('href') ? 
+			$(linkElement).attr('href').match(ITEM_LINK_REGEX) 
+			: null
+
 		if (urlMatch) {
 			url = urlMatch[0]
 			id = url.match(ITEM_REGEX)[0]
