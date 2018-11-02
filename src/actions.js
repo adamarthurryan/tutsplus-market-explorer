@@ -45,10 +45,7 @@ export const startLoadingPosts = () => {
             id: idMatch[0],
             tuts_site: siteMatch[1],
             publication_date: dateFormat(Date.parse(post.publication_date), 'yyyy-mm-dd'),
-            market_items: typeof post.market_items === "string" ? 
-              post.market_items.split(",").map(str => parseInt(str)) : [post.market_items]
-            }
-          )
+          })
         })
         posts = posts.sort((a,b) => b.publication_date.localeCompare(a.publication_date))
 
@@ -89,7 +86,7 @@ export const startLoadingItems = () => {
 
           return Object.assign(item, {
             price_dollars: item.price_cents/100,
-            tags: item.tags ? item.tags.split(",") : []
+            tags: item.tags ? item.tags.split(",") : [],
           })
         })
         items = items.sort((a,b) => b.number_of_sales-a.number_of_sales)

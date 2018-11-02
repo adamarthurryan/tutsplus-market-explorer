@@ -16,11 +16,12 @@ const {delay, fetchWithRetry, fetchUrls} = require('./scraper')
 const NUM_PAGES = 500
 const BASE_URL = "https://tutsplus.com/tutorials"
 
-const OUTPUT_FILE = "../data/posts.csv"
+const OUTPUT_FILE = "./data/posts.csv"
 
 const ITEM_LINK_REGEX = /https:\/\/(codecanyon|photodune|themeforest|videohive|audiojungle|graphicriver|3docean).net\/item\/[^"'?]+/g
 const ITEM_REGEX = /\d+$/
 
+const POSTS_DATABASE = "./data/posts.csv"
 
 //the collected scraped posts
 let posts = []
@@ -41,7 +42,7 @@ function scrape() {
 	console.log(`Scraping ${NUM_PAGES} pages of posts`)
 
 	//populate an array with page suffixes which will be appended to the tutorials index page urls 
-	const indexPageSuffixes = Array(NUM_PAGES).fill().map((_, idx) => idx>1 ? `?page=${idx}` : "")
+	const indexPageSuffixes = Array(NUM_PAGES).fill().map((_, idx) => idx>=1 ? `?page=${idx+1}` : "")
 	const indexPageUrls = indexPageSuffixes.map(suffix => BASE_URL+suffix)
 	
 	//for each index page, fetch that page and pass its body off for processing
@@ -56,7 +57,7 @@ function scrape() {
 		)
 	)
 */
-	fetchPage(indexPageUrls, 0, processHtml)
+	fetchUrls(indexPageUrls, 0, processIndexPage)
 }
 
 
@@ -86,31 +87,56 @@ async function scrapePost(post) {
 
 
 function processPost(post, html) {
+	let $ = cheerio.load(html)
+	let linkElements = $('article.post')
+
+	let links = {}
+
+	linkElements.find('a').each((idx,linkElement) => {
+		const urlMatch = $(linkElement).attr('href').match(ITEM_LINK_REGEX)
+		if (urlMatch) {
+			url = urlMatch[0]
+			id = url.match(ITEM_REGEX)[0]
+			text = $(linkElement).text()
+
+			links[id] = {id, url, text}
+		}
+	})
+
+/*
 	let links = html.match(ITEM_LINK_REGEX)
+
 	if (links) 
-		links = links.map( link => link.match(ITEM_REGEX)[0] )
+		links = links.map( link => ({id: link.match(ITEM_REGEX)[0], url: link}))
 	else 
 		links = []
 
 	//make links unique
 	let linkSet = {}
-	links.forEach(link => linkSet[link]=link)
-	links = Object.keys(linkSet)
+	links.forEach(link => linkSet[link.id]=link)
+*/
 
-	post.market_items = links
+//	post.market_items = Object.values(links).map(link => link.id)
+//	post.market_urls = Object.values(links).map(link => link.url)
+//	post.market_texts = Object.values(links).map(link => link.text)
+
+	post.market_links=JSON.stringify(Object.values(links))
 
 	posts.push(post)
 
 
 	//render the post as a line of CSV with papaparse
 	//only output the header on the first line
-	const csv = Papa.unparse([post], {header:isFirst})
-	output.write(csv+'\n')
+	const csv = Papa.unparse([post], {
+		header:isFirst,
+		delimiter: Papa.RECORD_SEP,
+		quoteChar: '\''
+	})
+	output.write(csv+'\r\n')
 
 	isFirst=false
 }
 
-let posts = []
 
 //stream in the database
 function loadDatabase() {
@@ -119,6 +145,7 @@ function loadDatabase() {
 		const dataPapaStream = Papa.parse(Papa.NODE_STREAM_INPUT, {//options for papa parse
 			dynamicTyping: true,
 			header: true,
+
 		})
 
 		//only load the posts that link to market items
@@ -136,12 +163,11 @@ function loadDatabase() {
 	}
 	else {
 		console.log(`Database ${POSTS_DATABASE} does not exist`)
-		exit(1)
 	}
 }
 
 function main() {
-	loadDatabase()
+//	loadDatabase()
 	createOutput()
 	scrape()
 }

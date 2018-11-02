@@ -65,6 +65,9 @@ const processResults = (site) => (text) => {
 	let items = data.matches.map( (rawItem) => {
 		let item = {}
 
+		//some items actually have the delimiter character in their description!
+		item.description.replace('\u001e', '\n')
+
 		item.query = `site=${site}`
 
 		fields.forEach(field=>item[field]=rawItem[field])
@@ -85,8 +88,12 @@ const processResults = (site) => (text) => {
 
 	//render these items as CSV with papaparse
 	//only output the header for the first block of items
-	const csv = Papa.unparse(items, {header:isFirst})
-	output.write(csv+'\n')
+	const csv = Papa.unparse(items, {
+		header:isFirst,
+		delimiter: Papa.RECORD_SEP,
+		quoteChar: '\''
+	})
+	output.write(csv+'\r\n')
 
 	isFirst=false
 }

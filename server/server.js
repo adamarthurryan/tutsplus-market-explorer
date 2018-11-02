@@ -76,11 +76,14 @@ function loadPostsDatabase() {
 		const dataPapaStream = Papa.parse(Papa.NODE_STREAM_INPUT, {//options for papa parse
 			dynamicTyping: true,
 			header: true,
+			delimiter: Papa.RECORD_SEP,
+			quoteChar: '\''
 		})
 
 		//only load the posts that link to market items
-		dataPapaStream.on('data', (post) => { 
-			if (post.market_items) posts.push(post) 
+		dataPapaStream.on('data', (post) => {
+			post.market_links = JSON.parse(post.market_links)
+			if (post.market_links.length > 0 ) posts.push(post) 
 		})
 		dataPapaStream.on('end', () => {
 			//filter posts for unique values
@@ -106,19 +109,29 @@ function loadItemsDatabase() {
 		const dataPapaStream = Papa.parse(Papa.NODE_STREAM_INPUT, {//options for papa parse
 			dynamicTyping: true,
 			header: true,
+			delimiter: Papa.RECORD_SEP,
+			quoteChar: '\''
 		})
 
 		//only load the posts that link to market items
 		dataPapaStream.on('data', (item) => {
-			if (itemsByQuery[item.query]) 
-				itemsByQuery[item.query].push(item)
-			else
-				itemsByQuery[item.query] = [item]
+			try {
+				item.rating = item.rating ? JSON.parse(item.rating) : null
+
+
+				if (itemsByQuery[item.query]) 
+					itemsByQuery[item.query].push(item)
+				else
+					itemsByQuery[item.query] = [item]
+			}
+			catch (err) {
+				console.log("Error processing item: ", item)
+			}
 
 		})
 		dataPapaStream.on('end', () => {
 			//filter posts for unique values
-			console.log(`Loaded ${Object.values(itemsByQuery).reduce((acc,cur) =>acc+cur.length, 0)} posts from the database`)
+			console.log(`Loaded ${Object.values(itemsByQuery).reduce((acc,cur) =>acc+cur.length, 0)} items from the database`)
 		})
 		dataFileStream.pipe(dataPapaStream)
 	}

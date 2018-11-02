@@ -9,6 +9,8 @@ class VirtualizedTable extends Component {
 
 
     render() {
+        //!!! providing default prop value should be done in the proper React way
+        const disableHeader = this.props.disableHeader ? this.props.disableHeader : false
     	return (
             <WindowScroller>
             {({ height, isScrolling, onChildScroll, scrollTop }) => (
@@ -17,24 +19,14 @@ class VirtualizedTable extends Component {
             {({width }) => (
  
 
-//            <ColumnSizer
-//            columnMaxWidth={500}
-//            columnMinWidth={100}
-//            columnCount={this.props.fields.length}
-//            width={width}
-//            >
-//            {({ adjustedWidth, getColumnWidth, registerChild }) => (
-
                 <Table
-            
-//                    ref={registerChild}
-//                    columnWidth={getColumnWidth}
-//                    width={adjustedWidth}
 
                     autoHeight
                     isScrolling={isScrolling}
                     onScroll={onChildScroll}
                     scrollTop={scrollTop}
+
+                    disableHeader={disableHeader}
  
                     width={width}
                     height={height}
@@ -69,7 +61,6 @@ class VirtualizedTable extends Component {
                     }
                     )}
                 </Table>
-//            )}</ColumnSizer>
             )}</AutoSizer>
             )}</WindowScroller>
     	)

@@ -21,7 +21,15 @@ class Post extends Component {
 
 
       if (post) {
-        const items = post.market_items.map(itemId => this.props.items.find(item => item.id === itemId)).filter(item => item)
+        const itemsSearch = post.market_links
+          .map(({id, url, text}) => (
+            {id, url, text, item: this.props.items.find(item => item.id == id)}
+          ))
+        const items = itemsSearch
+          .filter( ({item}) => item !== undefined).map(({item}) => item)
+        const linksNotInDb = itemsSearch
+          .filter(({item})=>item === undefined)
+          .map(({id, url, text})=>({id, url, item_name:text}))
 
         return <div >
           <h3>{post.title} <a rel="noopener noreferrer" target="_blank" href={post.url}>&rarr;{post.tuts_site}</a></h3>
@@ -32,8 +40,11 @@ class Post extends Component {
 
           <VirtualizedTable fields={fields} data={items}/>
           
-          {post.market_items.length !== items.length ? 
-            <div><em>And {post.market_items.length - items.length} others not in this database...</em></div>
+          {linksNotInDb.length > 0 ?
+            <div> 
+              <div><em>And {linksNotInDb.length} others not in this database:</em></div>
+              <VirtualizedTable disableHeader fields={['item_name']} data={linksNotInDb}/>
+            </div>
             : null
           }
         </div>

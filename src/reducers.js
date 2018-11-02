@@ -14,11 +14,11 @@ export function itemPosts (state, action) {
   switch (action.type) {
     case 'add_posts':
       let newState = Object.assign({}, state)
-      action.data.forEach(post => post.market_items.forEach(item => {
-        if (newState[item]) 
-          newState[item].push(post) 
+      action.data.forEach(post => post.market_links.forEach(link => {
+        if (newState[link.id]) 
+          newState[link.id].push(post) 
         else
-          newState[item] = [post]
+          newState[link.id] = [post]
       }))
       return newState
     case 'clear_posts':
