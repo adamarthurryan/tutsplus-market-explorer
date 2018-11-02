@@ -97,7 +97,7 @@ function processPost(post, html) {
 			$(linkElement).attr('href').match(ITEM_LINK_REGEX) 
 			: null
 
-		if (urlMatch) {
+		if (urlMatch && urlMatch[0]) {
 			url = urlMatch[0]
 			id = url.match(ITEM_REGEX)[0]
 			text = $(linkElement).text()
@@ -105,23 +105,6 @@ function processPost(post, html) {
 			links[id] = {id, url, text}
 		}
 	})
-
-/*
-	let links = html.match(ITEM_LINK_REGEX)
-
-	if (links) 
-		links = links.map( link => ({id: link.match(ITEM_REGEX)[0], url: link}))
-	else 
-		links = []
-
-	//make links unique
-	let linkSet = {}
-	links.forEach(link => linkSet[link.id]=link)
-*/
-
-//	post.market_items = Object.values(links).map(link => link.id)
-//	post.market_urls = Object.values(links).map(link => link.url)
-//	post.market_texts = Object.values(links).map(link => link.text)
 
 	post.market_links=JSON.stringify(Object.values(links))
 
