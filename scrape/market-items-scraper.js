@@ -66,7 +66,8 @@ const processResults = (site) => (text) => {
 		let item = {}
 
 		//some items actually have the delimiter character in their description!
-		item.description.replace('\u001e', '\n')
+		if (item.description)
+			item.description.replace('\u001e', '\n')
 
 		item.query = `site=${site}`
 
