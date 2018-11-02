@@ -87,9 +87,9 @@ function loadPostsDatabase() {
 		})
 		dataPapaStream.on('end', () => {
 			//filter posts for unique values
-			let uniquePosts = {}
-			posts.forEach(post => uniquePosts[post.url] = post)
-			posts = Object.values(uniquePosts)
+			//let uniquePosts = {}
+			//posts.forEach(post => uniquePosts[post.url] = post)
+			//posts = Object.values(uniquePosts)
 			console.log("Loaded "+posts.length+ " posts from the database")
 		})
 		dataFileStream.pipe(dataPapaStream)

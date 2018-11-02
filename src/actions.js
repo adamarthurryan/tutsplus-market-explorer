@@ -2,8 +2,8 @@
 import dateFormat from 'dateformat'
 
 //export const updateQuery = (string) => ({type: 'update_query_string', data:string})
-
-export const updateQuerySite = (site) => ({type: 'update_query_site', data: site})
+export const updatePostFilter = (filter) => ({type: 'change_post_filter', data: filter})
+export const updateQuerySite = (site) => ({type: 'change_query_site', data: site})
 export const changeTab = (tab) => ({type: 'change_tab', data:tab})
 
 export const addItems = (items) => ({type: 'add_items', data:items})

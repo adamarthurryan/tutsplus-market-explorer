@@ -29,9 +29,8 @@ class QueryInput extends Component {
 
 
     	return (
-        <div className="ui form">
-    		  <div className="inline fields">
-            <label>Site</label>
+    		  <div className="field">
+            <label>Market Site</label>
             <div className="field">
               <select className="ui fluid search dropdown" value={this.props.query.site} onChange={this.handleQueryChange.bind(this)}>
                 <option value="">All</option>
@@ -45,7 +44,6 @@ class QueryInput extends Component {
               </select>
             </div>
           </div>
-        </div>
 
     	)
     }

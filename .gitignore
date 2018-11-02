@@ -24,3 +24,4 @@ yarn-error.log*
 server/server-secret.js
 scraper/envato-secret.js
 data/items.csv
+data/posts.csv

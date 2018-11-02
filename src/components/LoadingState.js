@@ -14,13 +14,13 @@ class LoadingState extends Component {
     render() {
       const loadingStringRender = (loader) =>
         ((loader.status === STATE_LOADING || loader.status === STATE_DONE)? ` ${loader.loaded}` : "") 
-        + ((loader.status === STATE_ERROR) ? `error ${loader.error}` : "") 
+        + ((loader.status === STATE_ERROR) ? `error` : "") 
 
 
     	return (
           <div className="ui section float right">
-            <p>Items: {loadingStringRender(this.props.itemsLoader)}</p>
-            <p>Posts: {loadingStringRender(this.props.postsLoader)}</p>
+            <p>Items: {loadingStringRender(this.props.itemsLoader)}, 
+            Posts: {loadingStringRender(this.props.postsLoader)}</p>
           </div>
     	)
     }

@@ -34,14 +34,17 @@ export function view (state, action) {
     case 'change_tab':
       return Object.assign({}, state, {tab:action.data})
 
+    case 'change_post_filter':
+      return Object.assign({}, state, {postFilter:action.data})
+
     default: 
-      return state || {tab:""}
+      return state || {tab:"", postFilter:""}
   }
 }
 
 export function query(state, action) {
   switch (action.type) {
-    case 'update_query_site': 
+    case 'change_query_site': 
       return Object.assign({}, state, {site:action.data})
 
     default:

@@ -12,7 +12,7 @@ import CategoriesTable from './components/CategoriesTable'
 import ItemsTable from './components/ItemsTable'
 import Item from './components/Item'
 import LoadingState from './components/LoadingState'
-
+import PostFilterInput from './components/PostFilterInput'
 
 
 
@@ -25,15 +25,16 @@ class App extends Component {
 
         <h1 className="ui header left floated main-header">Market Explorer</h1>
 
-        <div className="ui basic right floated right aligned segment">
-          <div>
-            <QueryInput/>
-          </div>
-          <div>
+        <div className="ui right floated right aligned segment">
+        <div className="ui form ">
+            <div className="fields">
+              <QueryInput/>
+              <PostFilterInput/>
+            </div>
             <LoadingState/>
-          </div>
         </div>
-
+        </div>
+        
         <div className="ui top attached tabular menu">
           <NavLink className="item" activeClassName="active" to="/categories">Categories</NavLink>
           <NavLink className="item" activeClassName="active" to="/tags">Tags</NavLink>

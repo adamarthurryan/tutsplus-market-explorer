@@ -7,6 +7,6 @@ Incremental loading of posts (since last scrape)
 
 Scrape for elements links
 
-Filter posts by sections
-
 Sort tables by clicking column headers
+
+Integrate keyword research / SEMRush data
