@@ -20,57 +20,119 @@ export const loadingPosts = (loaded, total) => ({type: 'loading_posts', data:{lo
 export const doneLoadingPosts = () => ({type: 'done_loading_posts'})
 export const errorLoadingPosts = (error) => ({type: 'error_loading_posts', data: error})
 
+export const addPostSems = (sems) => ({type: 'add_post_sems', data: sems})
+export const clearPostSems = (sems) => ({type: 'clear_post_sems'})
+
+export const loadingPostSems = (loaded, total) => ({type: 'loading_post_sems', data:{loaded, total}})
+export const doneLoadingPostSems = () => ({type: 'done_loading_post_sems'})
+export const errorLoadingPostSems = (error) => ({type: 'error_loading_post_sems', data: error})
+
+export const addItemSems = (sems) => ({type: 'add_item_sems', data: sems})
+export const clearItemSems = (sems) => ({type: 'clear_item_sems'})
+
+export const loadingItemSems = (loaded, total) => ({type: 'loading_item_sems', data:{loaded, total}})
+export const doneLoadingItemSems = () => ({type: 'done_loading_item_sems'})
+export const errorLoadingItemSems = (error) => ({type: 'error_loading_item_sems', data: error})
+
+const REGEX_POST_ID = /[a-z]+-\d+$/
+const REGEX_ITEM_ID = /\d+$/
 
 export const startLoadingPosts = () => {
+  const getQueryString = (getState) => "/api/posts"
+  const countLoaded = (posts) => posts.length
+  const transformLoaded = (posts) => {
 
-  return function (dispatch) {
-    dispatch(clearPosts())
-    dispatch(loadingPosts(0,0))
+    posts = posts.map(post => {
+      const idMatch = post.url.match(REGEX_POST_ID)
+      const siteMatch = post.url.match(/https?:\/\/([^/]+)\//)
 
-    fetch('/api/posts')
-      .then(response => {
-        if (!response.ok)
-          throw new Error(`Server returned ${response.status}`)
-        else if (response.headers.get('content-type').indexOf("application/json")===-1)
-          throw new Error(`Server returned non-JSON data (${response.headers.get('content-type')})`)
-        else
-          return response.json()
-      })
-      .then(posts => {
-        posts = posts.map(post => {
-          const idMatch = post.url.match(/[a-z]+-\d+$/)
-          const siteMatch = post.url.match(/https?:\/\/([^/]+)\//)
-
-          return Object.assign(post, {
-            id: idMatch[0],
-            tuts_site: siteMatch[1],
-            publication_date: dateFormat(Date.parse(post.publication_date), 'yyyy-mm-dd'),
-          })
+      if (idMatch && siteMatch) {
+        return Object.assign(post, {
+          id: idMatch[0],
+          tuts_site: siteMatch[1],
+          publication_date: dateFormat(Date.parse(post.publication_date), 'yyyy-mm-dd'),
         })
-        posts = posts.sort((a,b) => b.publication_date.localeCompare(a.publication_date))
+      }
+      else throw new Error(`Invalid post format: ${JSON.stringify(post)}`)
+    })
+    posts = posts.sort((a,b) => b.publication_date.localeCompare(a.publication_date))
 
-        dispatch(loadingPosts(posts.length, posts.length))
-        dispatch(addPosts(posts))
-        dispatch(doneLoadingPosts())
-      })
-      .catch(error => {
-        dispatch(errorLoadingPosts(error))
-        console.log(error)
-      })
+    return posts    
   }
 
+  return startLoading(getQueryString, countLoaded, transformLoaded, {add:addPosts, clear:clearPosts, loading:loadingPosts, errorLoading:errorLoadingPosts, doneLoading:doneLoadingPosts})
 }
 
-export const startLoadingItems = () => {
 
+
+export const startLoadingItems = () => {
+  const getQueryString = (getState) => {
+    const querySite = getState().query.site
+    return "/api/items"+(querySite ? `?site=${querySite}`: "")
+  }
+  const countLoaded = (items) => items.length
+  const transformLoaded = (items) => {
+    items = items.map(item => {
+
+      return Object.assign(item, {
+        price_dollars: item.price_cents/100,
+        tags: item.tags ? item.tags.split(",") : [],
+      })
+    })
+    items = items.sort((a,b) => b.number_of_sales-a.number_of_sales)
+
+    return items    
+  }
+
+  return startLoading(getQueryString, countLoaded, transformLoaded, {add:addItems, clear:clearItems, loading:loadingItems, errorLoading:errorLoadingItems, doneLoading:doneLoadingItems})
+}
+
+
+export const startLoadingItemSems = () => {
+  let getQueryString = (getState) => {
+    const querySite = getState().query.site
+    return "/api/sem/items"+(querySite ? `?site=${querySite}`: "")
+  }
+  let countLoaded = (sems) => Object.values(sems).reduce((acc,cur) => acc+cur.length, 0)
+  let transformloaded = (sems) => {
+    Object.values(sems).forEach(sem => sem.forEach(line => {
+      if (!line.url) {
+        console.log(`Malformed sem line:`, sem, line)
+        throw new Error("Malformed sem record")
+      }
+      line.id=line.url.match(REGEX_ITEM_ID)[0]
+    }))
+    return sems
+  }
+
+
+  return startLoading(getQueryString, countLoaded, transformloaded, {add:addItemSems, errorLoading:errorLoadingItemSems, loading:loadingItemSems, doneLoading: doneLoadingItemSems, clear: clearItemSems})
+} 
+export const startLoadingPostSems = () => {
+  let getQueryString = (getState) => "/api/sem/posts"
+  let countLoaded = (sems) => Object.values(sems).reduce((acc,cur) => acc+cur.length, 0)
+  let transformloaded = (sems) => {
+    Object.values(sems).forEach(sem => sem.forEach(line => {
+      if (!line.url) {
+        console.log(`Malformed sem line:`, sem, line)
+        throw new Error("Malformed sem record")
+      }
+      line.id = line.url.match(REGEX_POST_ID)[0]
+    }))
+    return sems
+  }
+  return startLoading(getQueryString, countLoaded, transformloaded, {add:addPostSems, errorLoading:errorLoadingPostSems, loading:loadingPostSems, doneLoading: doneLoadingPostSems, clear: clearPostSems})
+}
+
+
+const startLoading = (getQueryString, countLoaded, transformLoaded=undefined, {add, errorLoading, loading, doneLoading, clear}) => {
 
   return function (dispatch, getState) {
-    const querySite = getState().query.site
+ 
+    dispatch(clear())
+    dispatch(loading(0,0))
 
-    const queryString = "/api/items"+(querySite ? `?site=${querySite}`: "")
-
-    dispatch(clearItems())
-    dispatch(loadingItems(0,0))
+    const queryString = getQueryString(getState)
 
     fetch(queryString)
       .then(response => {
@@ -81,26 +143,22 @@ export const startLoadingItems = () => {
         else
           return response.json()
       })
-      .then(items => {
-        items = items.map(item => {
+      .then(loadedData => {
 
-          return Object.assign(item, {
-            price_dollars: item.price_cents/100,
-            tags: item.tags ? item.tags.split(",") : [],
-          })
-        })
-        items = items.sort((a,b) => b.number_of_sales-a.number_of_sales)
+        let count = countLoaded(loadedData)
+        if (transformLoaded)
+          loadedData = transformLoaded(loadedData)
 
-        dispatch(loadingItems(items.length, items.length))
-        dispatch(addItems(items))
-        dispatch(doneLoadingItems())
+        dispatch(loading(count, count))
+        dispatch(add(loadedData))
+        dispatch(doneLoading())
       })
       .catch(error => {
-        dispatch(errorLoadingItems(error))
+        dispatch(errorLoading(error))
         console.log(error)
       })
-  }
 
+  }
 }
 
 /*

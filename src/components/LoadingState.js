@@ -20,7 +20,7 @@ class LoadingState extends Component {
     	return (
           <div className="ui section float right">
             <p>Items: {loadingStringRender(this.props.itemsLoader)}, 
-            Posts: {loadingStringRender(this.props.postsLoader)}</p>
+            Posts: {loadingStringRender(this.props.postsLoader)}, Keywords: {loadingStringRender(this.props.itemSemsLoader)}</p>
           </div>
     	)
     }

@@ -18,7 +18,9 @@
     "react-scripts": "2.0.5",
     "react-virtualized": "^9.20.1",
     "redux": "^4.0.1",
-    "redux-thunk": "^2.3.0"
+    "redux-thunk": "^2.3.0",
+    "semrush-api": "^0.1.8",
+    "tiny-async-pool": "^1.0.4"
   },
   "scripts": {
     "start": "react-scripts start",

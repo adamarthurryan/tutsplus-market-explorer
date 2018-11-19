@@ -1,6 +1,7 @@
 
 import React, { Component } from 'react';
 import {connect} from 'react-redux'
+import {postParams} from './fieldParams'
 
 
 import VirtualizedTable from './VirtualizedTable'
@@ -25,7 +26,7 @@ class PostsTable extends Component {
         )
     	
   		return <div>
-	   		<VirtualizedTable fields={fields} data={posts}/>
+	   		<VirtualizedTable fields={fields} fieldParams={postParams} data={posts}/>
 		  </div>
     }
 }

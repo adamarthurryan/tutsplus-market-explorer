@@ -44,7 +44,9 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => ({
   startLoadingPosts: () => dispatch(Actions.startLoadingPosts()),
-  startLoadingItems: () => dispatch(Actions.startLoadingItems())
+  startLoadingItems: () => dispatch(Actions.startLoadingItems()),
+  startLoadingItemSems: () => dispatch(Actions.startLoadingItemSems()),
+  startLoadingPostSems: () => dispatch(Actions.startLoadingPostSems())
 })
 
 
@@ -52,6 +54,8 @@ class Root extends Component {
   componentWillMount() {
     this.props.startLoadingPosts()
     this.props.startLoadingItems()
+    this.props.startLoadingItemSems()
+    this.props.startLoadingPostSems()
   }
 
   render() {
@@ -71,6 +75,6 @@ ReactDOM.render(
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.
 // Learn more about service workers: http://bit.ly/CRA-PWA
-serviceWorker.unregister()
+serviceWorker.register()
 
 

@@ -13,6 +13,8 @@ import ItemsTable from './components/ItemsTable'
 import Item from './components/Item'
 import LoadingState from './components/LoadingState'
 import PostFilterInput from './components/PostFilterInput'
+import Keyword from './components/Keyword'
+import KeywordsTable from './components/KeywordsTable'
 
 
 
@@ -40,6 +42,7 @@ class App extends Component {
           <NavLink className="item" activeClassName="active" to="/tags">Tags</NavLink>
           <NavLink className="item" activeClassName="active" to="/items">All Items</NavLink>
           <NavLink className="item" activeClassName="active" to="/posts">Promo Posts</NavLink>
+          <NavLink className="item" activeClassName="active" to="/keywords">Keywords</NavLink>
 
         </div>
 
@@ -56,6 +59,8 @@ class App extends Component {
             <Route path="/categories/:category/:subCategory" component={ItemsTable}/>
             <Route path="/categories/:category" component={ItemsTable}/>
             <Route path="/categories" component={CategoriesTable}/>
+            <Route path="/keywords/:keyword" component={Keyword}/>
+            <Route path="/keywords" component={KeywordsTable}/>
             <Route path="/items/:itemId" component={Item}/>
             <Route path="/items" component={ItemsTable}/>
             <Route path="/" component={ItemsTable}/>

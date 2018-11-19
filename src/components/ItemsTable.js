@@ -1,6 +1,7 @@
 
 import React, { Component } from 'react';
 import {connect} from 'react-redux'
+import {itemParams} from './fieldParams'
 
 
 //import {Autosizer, Table} from 'react-virtualized'
@@ -49,7 +50,7 @@ class ItemsTable extends Component {
 		return <div>
 			{categoryPath ? <h3>Category: {categoryPath}</h3>: null}
 			{this.props.match.params.tag ? <h3>Tag: {this.props.match.params.tag}</h3>: null}
-			<VirtualizedTable fields={fields} data={itemsWithPromotions}/>
+			<VirtualizedTable fields={fields} fieldParams={itemParams} data={itemsWithPromotions}/>
 		</div>
     }
 }

@@ -12,10 +12,8 @@ const mapStateToProps = state =>
 
 const mapDispatchToProps = dispatch => ({
   updateQuerySite: site => dispatch(Actions.updateQuerySite(site)),
-  startLoadingItems: item => {
-      //and run the query
-      dispatch(Actions.startLoadingItems())
-    }
+  startLoadingItems: () => dispatch(Actions.startLoadingItems()),
+  startLoadingItemSems: () => dispatch(Actions.startLoadingItemSems()),
 })
 
 class QueryInput extends Component {
@@ -23,6 +21,7 @@ class QueryInput extends Component {
  	handleQueryChange(event) {
     	this.props.updateQuerySite(event.target.value)
       this.props.startLoadingItems()
+      this.props.startLoadingItemSems()
   }
 
   render() {

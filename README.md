@@ -14,8 +14,8 @@ To install the app:
 
 ### Configure Secret Keys
 
-Templates for the secret key config files are at **scrape/envato-secret.js.template** (the Envato API access token) and **server/server-secret.js.template** (the server username and password). Copy these to 
-**scrape/envato-secret.js** and **server/server-secret.js** respectively, and fill in the required values.
+Templates for the secret key config files are at **backend/secret/envato-secret.js.template** (the Envato API access token), **backend/secret/semrush-secret.js.template** (the Semrush API access token), and **backend/secret/server-secret.js.template** (the server username and password). Copy these to 
+**backend/secret/envato-secret.js** etc. (remove the **.template** part), and fill in the required values.
 
 ### Scraping Data
 
@@ -27,11 +27,11 @@ Create the data folder
 
 To scrape the items and posts data run
 
-    node scrape/market-items-scraper.js
+    node backend/market-items-scraper.js
 
 and 
 
-    node scrape/tutsplus-market-links-scraper.js
+    node backend/tutsplus-market-links-scraper.js
 
 These will take several minutes each to run.
 
@@ -40,7 +40,7 @@ These will take several minutes each to run.
 
 Uses the create-react-app hot reloading dev server on port 3000, which proxies to the back-end Express server on port 8080.
 
-    node server/server.js & npm start
+    node backend/server.js & npm start
 
 
 ### Production Server
@@ -48,7 +48,7 @@ Uses the create-react-app hot reloading dev server on port 3000, which proxies t
 Build the front-end with create-react-app and launch the server.
 
     npm run build
-    node server/server.js
+    node backend/server.js
 
 
 ### Low-memory environments
@@ -66,7 +66,7 @@ To make the application start on boot, run the following:
     pm2 startup systemd
     
     # start the app with pm2
-    pm2 start node --name tutsplus-market-explorer -- server/server.js
+    pm2 start node --name tutsplus-market-explorer -- backend/server.js
     
     # save the current pm2 config so that it can be reloaded on boot
     pm2 save

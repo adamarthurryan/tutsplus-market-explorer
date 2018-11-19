@@ -28,6 +28,40 @@ export function itemPosts (state, action) {
   }
 }
 
+const keywordsAddHelper = (field) => (state,sems) => {
+  let newState = Object.assign({}, state)
+
+  Object.values(sems).forEach(sem => sem.forEach(semLine =>{
+    if (!newState[semLine.keyword])
+      newState[semLine.keyword]={keyword: semLine.keyword, itemSems:[], postSems:[]}
+
+    newState[semLine.keyword][field].push(semLine)
+  }))
+  return newState
+}
+
+const keywordsClearHelper = (field) => (state) => {
+  let newState = Object.assign({}, state)
+  Object.values(newState).map(entry => Object.assign({}, entry, {[field]:[]} ))
+  return newState
+}
+
+//a map of keywords to item and post ids to make lookup faster
+export function keywords (state, action) {
+  switch (action.type) {
+    case 'add_item_sems':
+      return keywordsAddHelper('itemSems')(state, action.data)
+    case 'add_post_sems':
+      return keywordsAddHelper('postSems')(state, action.data)
+    case 'clear_item_sems':
+      return keywordsClearHelper('itemSems')(state)
+    case 'clear_post_sems':
+      return keywordsClearHelper('postSems')(state)
+    default: 
+      return state || {}
+  }
+}
+
 export function view (state, action) {
   switch (action.type) {
 
@@ -52,11 +86,32 @@ export function query(state, action) {
   }
 }
 
+export function itemSems (state, action) {
+  switch (action.type) {
+    case 'add_item_sems':
+      return Object.assign({}, state, action.data)
+    case 'clear_item_sems':
+      return {}
+    default:
+      return state || {}
+  }
+}
+
+export function postSems (state, action) {
+  switch (action.type) {
+    case 'add_post_sems':
+      return Object.assign({}, state, action.data)
+    case 'clear_post_sems':
+      return {}
+    default:
+      return state || {}
+  }
+}
+
 export function items (state, action) {
   switch (action.type) {
     
     case 'add_items':
-      
       return state.concat(action.data)
     case 'clear_items':
       return []
@@ -130,6 +185,8 @@ const loader = (key) => (state, action) => {
 
 export const itemsLoader = loader('items') 
 export const postsLoader = loader('posts')
+export const postSemsLoader = loader('post_sems')
+export const itemSemsLoader = loader('item_sems')
 
 export const STATE_EMPTY = "empty"
 export const STATE_LOADING = "loading"

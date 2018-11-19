@@ -2,7 +2,6 @@ import React, { Component } from 'react'
 import 'react-virtualized/styles.css'
 import {AutoSizer, Table, Column, WindowScroller} from 'react-virtualized'
 
-import fieldParams from './fieldParams'
 
 
 class VirtualizedTable extends Component {
@@ -11,6 +10,8 @@ class VirtualizedTable extends Component {
     render() {
         //!!! providing default prop value should be done in the proper React way
         const disableHeader = this.props.disableHeader ? this.props.disableHeader : false
+        const fieldParams = this.props.fieldParams
+
     	return (
             <WindowScroller>
             {({ height, isScrolling, onChildScroll, scrollTop }) => (

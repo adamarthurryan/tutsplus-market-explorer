@@ -2,24 +2,21 @@
 import React from 'react'
 import {Link} from 'react-router-dom'
 
-const categoryParams={label:"Category", width:250, render: cellData => <Link to={`/categories/${cellData}`}>{cellData}</Link>}
+const categoryFieldParams={label:"Category", width:250, render: cellData => <Link to={`/categories/${cellData}`}>{cellData}</Link>}
 
-export default {
+const itemParams = {
 	number_of_sales: {label: "Sales", width:60}, 
 	avg_price_dollars: {label: "Avg Price", render: cellData=> `$${Math.round(cellData)}`},
 	num_items: {label: "Items", width: 60},
-	classification: categoryParams , 
+	classification: categoryFieldParams , 
+	category : categoryFieldParams, 
 	price_dollars: {label: "Price", width: 60, render: cellData=> `$${cellData}`}, 
 	trending: {label: "Trend?", width: 60, render: cellData=> cellData ? "Yes": ""}, 
 	updated_at: {label: "Updated"},
 
-	category : categoryParams, 
 	tag: {label:"Tag", render: cellData => (<Link to={`/tags/${cellData}`}>{cellData}</Link>)},
 	name: {label:"Item Name", width:400, render: (cellData, rowData) => <Link to={`/items/${rowData.id}`}>{cellData}</Link>}, 
 
-	title: {label:"Title", width:400, render : (cellData, rowData) => <Link to={`/posts/${rowData.id}`}>{cellData}</Link>},
-	published_at: {label:"Publication Date"},
-	author: {label:"Author"},
 	promotions: {label: "Promotion", render: (cellData) => cellData ?
 		<Link to={`/posts/${cellData[0].id}`}>{cellData[0].publication_date}</Link>
 		: ""
@@ -36,7 +33,48 @@ export default {
 			default: return cellData
 		}
 	}},
-	tuts_site: {label: "site", width: 60, render: (cellData) => cellData.match(/^[^.]*/)[0] }
+}
+
+const keywordParams = {
+	keyword: {label:"Keyword", width: 400, render: cellData => (<Link to={`/keywords/${cellData}`}>{cellData}</Link>)}, 
+	pos: {label:"Position", width: 60},
+	max_pos: {label: "Max Pos", width: 60},
+	traffic: {label:"Traffic", width: 60}, 
+	sum_traffic: {label:"Sum Traffic", width: 60}, 
+	number_of_results: {label:"Num Results", width: 60}, 
+	average_vol: {label:"Avg Vol"},
+	  item: {
+	    label:"Item", 
+	    width:400, 
+	    render: (cellData, rowData) => 
+	      (cellData ? 
+	        <Link to={`/items/${cellData.id}`}>{cellData.name}</Link>
+	        : <Link to={`/items/${rowData.id}`}>{rowData.id}</Link>
+	      )
+	  },
+	  post: {
+	    label:"Post", 
+	    width:400, 
+	    render: (cellData, rowData) => 
+	      (cellData ? 
+	        <Link to={`/posts/${cellData.id}`}>{cellData.title}</Link>
+	        : <Link to={`/posts/${rowData.id}`}>{rowData.id}</Link>
+	      )
+	  },
+	num_occurrences: {
+		label: "Count",
+		width: 60,
+	}          
 
 }
 
+const postParams = {
+	title: {label:"Title", width:400, render : (cellData, rowData) => <Link to={`/posts/${rowData.id}`}>{cellData}</Link>},
+	published_at: {label:"Publication Date"},
+	author: {label:"Author"},
+	tuts_site: {label: "site", width: 60, render: (cellData) => cellData.match(/^[^.]*/)[0] },
+	category : categoryFieldParams, 
+}
+
+
+export {itemParams, postParams, keywordParams }
