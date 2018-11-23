@@ -80,6 +80,8 @@ class ItemsTable extends Component {
         }))
 
 		return <div>
+            {categoryPath ? <h3>Category: {categoryPath}</h3>: null}
+            {this.props.match.params.tag ? <h3>Tag: {this.props.match.params.tag}</h3>: null}
             <div className="ui form ">
               <div className="fields">
                 <div className="inline field">
@@ -88,8 +90,6 @@ class ItemsTable extends Component {
                 </div>
               </div>
             </div>
-			{categoryPath ? <h3>Category: {categoryPath}</h3>: null}
-			{this.props.match.params.tag ? <h3>Tag: {this.props.match.params.tag}</h3>: null}
 			<VirtualizedTable fields={fields} fieldParams={params} data={itemsWithPromotions}/>
 		</div>
     }
