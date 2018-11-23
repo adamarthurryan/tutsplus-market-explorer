@@ -98,7 +98,7 @@ app.get('*', function (req,res) {
 
 
 async function launch() {
-	posts = await loadPostsDatabase()
+	posts = await loadPostsDatabase(false)
 	itemsByQuery = await loadItemsDatabase()
 	semrushByPost = await loadPostsSemrushDatabase()
 	semrushByQueryAndItem = await loadItemsSemrushDatabase()

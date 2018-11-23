@@ -1,10 +1,9 @@
 
 import React, { Component } from 'react';
 import {connect} from 'react-redux'
-import {Link} from 'react-router-dom'
 
 import VirtualizedTable from './VirtualizedTable'
-import {postParams, itemParams, keywordParams} from './fieldParams'
+import {keywordParams} from './fieldParams'
 
 const mapStateToProps = state => 
   Object.assign(
@@ -34,7 +33,7 @@ class Keyword extends Component {
       let itemSems = []
       if (keywordEntries && keywordEntries.itemSems.length) {
         itemSems = keywordEntries.itemSems.map(sem => {
-          let item = this.props.items.find(item => item.id==sem.id)
+          let item = this.props.items.find(item => item.id===sem.id)
           return Object.assign({}, sem, {item}) 
         })
 

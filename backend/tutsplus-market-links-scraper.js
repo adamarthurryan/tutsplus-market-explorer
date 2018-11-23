@@ -73,7 +73,7 @@ function processIndexPage(html) {
 		let url = $(".posts__post-title", post).attr('href')
 		let primary_topic = $(".posts__post-primary-topic-link", post).text()
 		let primary_category = $(".posts__post-primary-category-link", post).text()
-		let teaser = $(".posts__post-teaser", post).text()
+		let teaser = $(".posts__post-teaser", post).text().replace(/[\n]/g, " ")
 
 		scrapePost({title, publication_date, author, url, primary_topic, primary_category, teaser})
 	})

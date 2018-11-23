@@ -2,7 +2,7 @@
 import React from 'react'
 import {Link} from 'react-router-dom'
 
-const categoryFieldParams={label:"Category", width:250, render: cellData => <Link to={`/categories/${cellData}`}>{cellData}</Link>}
+const categoryFieldParams={label:"Category", width:250, render: cellData => <Link to={`/items/bycategory/${cellData}`}>{cellData}</Link>}
 
 const itemParams = {
 	number_of_sales: {label: "Sales", width:60}, 
@@ -33,6 +33,20 @@ const itemParams = {
 			default: return cellData
 		}
 	}},
+
+}
+
+const selectedParam = (selectionCallback) => {
+	return { selected: {label: " ", width: 25, render: (cellData, rowData) => {
+		let toggle = cellData
+		let changeHandler = (event)=> {
+			toggle = ! toggle
+			selectionCallback(event.target.value, toggle)
+		}
+
+		return<input checked={cellData} onChange={changeHandler} type="checkbox" value={rowData.id}/> 
+	} }
+	}
 }
 
 const keywordParams = {
@@ -42,7 +56,7 @@ const keywordParams = {
 	traffic: {label:"Traffic", width: 60}, 
 	sum_traffic: {label:"Sum Traffic", width: 60}, 
 	number_of_results: {label:"Num Results", width: 60}, 
-	average_vol: {label:"Avg Vol"},
+	average_vol: {label:"Avg Vol", width:60},
 	  item: {
 	    label:"Item", 
 	    width:400, 
@@ -77,4 +91,4 @@ const postParams = {
 }
 
 
-export {itemParams, postParams, keywordParams }
+export {itemParams, postParams, keywordParams, selectedParam}

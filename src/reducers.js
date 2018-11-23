@@ -67,12 +67,29 @@ export function view (state, action) {
 
     case 'change_tab':
       return Object.assign({}, state, {tab:action.data})
-
-    case 'change_post_filter':
-      return Object.assign({}, state, {postFilter:action.data})
-
+    case 'change_post_site_filter':
+      return Object.assign({}, state, {postSiteFilter:action.data})
+    case 'change_post_title_filter':
+      return Object.assign({}, state, {postTitleFilter:action.data})
+    case 'change_post_market_links_filter':
+      return Object.assign({}, state, {postMarketLinksFilter:action.data})
+    case 'change_category_name_filter':
+      return Object.assign({}, state, {categoryNameFilter:action.data})
+    case 'change_tag_name_filter':
+      return Object.assign({}, state, {tagNameFilter:action.data})
+    case 'change_item_name_filter':
+      return Object.assign({}, state, {itemNameFilter:action.data})
+    case 'change_keyword_filter':
+      return Object.assign({}, state, {keywordFilter:action.data})
+    case 'change_keyword_type_filter':
+      return Object.assign({}, state, {keywordTypeFilter:action.data})
+    case 'select_item':
+      return Object.assign({}, state, {selections: Object.assign({}, state.selections, {[action.data]:true})})
+    case 'unselect_item':
+      const {[action.data]: oldValue, ...remaining} = state.selections 
+      return Object.assign({}, state, {selections: remaining})
     default: 
-      return state || {tab:"", postFilter:""}
+      return state || {tab:"", postSiteFilter:"", postMarketLinksFilter:"", postTitleFilter:"", categoryNameFilter:"", tagNameFilter:"", itemNameFilter:"", keywordFilter:"", keywordTypeFilter:"", selections:{}}
   }
 }
 

@@ -36,7 +36,7 @@ class Item extends Component {
           <p><strong>Author: </strong>{item.author_username}</p>
           <p><strong>Rating: </strong>{item.rating.rating} from {item.rating.count} users</p>
           <p><strong>Trending? </strong>{item.trending ? "Yes" : "No"}</p>
-          <p><strong>Category: </strong><Link to={`/categories/${item.classification}`}>{item.classification}</Link></p>
+          <p><strong>Category: </strong><Link to={`/items/bycategory/${item.classification}`}>{item.classification}</Link></p>
           <p><strong>Tags: </strong>{item.tags.map(tag=> <span key={tag}><Link to={`/tags/${tag}`}>{tag}</Link>, </span>)}</p>
 
           { posts.length > 0 ?

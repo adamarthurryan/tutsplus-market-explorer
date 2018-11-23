@@ -24,5 +24,4 @@ yarn-error.log*
 backend/secret/server-secret.js
 backend/secret/semrush-secret.js
 backend/secret/envato-secret.js
-data/items.csv
-data/posts.csv
+data/*

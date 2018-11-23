@@ -63,7 +63,8 @@ async function getUrlSemrushData(url) {
 	let results = await sem.urlOrganic({
 			url: url,
 			display_limit: 10,
-			database: 'us'
+			database: 'us',
+			export_columns: "Ph,Po,Nq,Co,Nr,Td,Kd"
 		})
 	return parseSemrushResults(results)
 }
@@ -90,9 +91,9 @@ async function scrapeSemrushData(output, url, query, count, i, isFirstObj) {
 			quoteChar: '\''
 		})
 		output.write(csv+'\r\n')
+		isFirstObj.value=false
 	}
 	
-	isFirstObj.value=false
 	process.stdout.write(`Retrieved ${i} of ${count}\r`);
 }
 
@@ -121,11 +122,11 @@ async function scrapeItemsSemrushData(itemsByQuery) {
 }
 
 async function main() {
-	let posts = await loadPostsDatabase()
+	let posts = await loadPostsDatabase(false)
 	let itemsByQuery = await loadItemsDatabase()
 
 	await scrapePostsSemrushData(posts)
-	await scrapeItemsSemrushData(itemsByQuery)
+//	await scrapeItemsSemrushData(itemsByQuery)
 }
 
 main()

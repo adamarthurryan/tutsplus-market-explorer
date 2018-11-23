@@ -2,12 +2,22 @@
 import dateFormat from 'dateformat'
 
 //export const updateQuery = (string) => ({type: 'update_query_string', data:string})
-export const updatePostFilter = (filter) => ({type: 'change_post_filter', data: filter})
+export const updatePostSiteFilter = (filter) => ({type: 'change_post_site_filter', data: filter})
+export const updatePostTitleFilter = (filter) => ({type: 'change_post_title_filter', data: filter})
+export const updatePostMarketLinksFilter = (filter) => ({type: 'change_post_market_links_filter', data: filter})
+export const updateCategoryNameFilter = (filter) => ({type: 'change_category_name_filter', data: filter})
+export const updateTagNameFilter = (filter) => ({type: 'change_tag_name_filter', data: filter})
+export const updateItemNameFilter = (filter) => ({type: 'change_item_name_filter', data: filter})
+export const updateKeywordFilter = (filter) => ({type: 'change_keyword_filter', data: filter})
+export const updateKeywordTypeFilter = (filter) => ({type: 'change_keyword_type_filter', data: filter})
 export const updateQuerySite = (site) => ({type: 'change_query_site', data: site})
 export const changeTab = (tab) => ({type: 'change_tab', data:tab})
 
 export const addItems = (items) => ({type: 'add_items', data:items})
 export const clearItems = () => ({type: 'clear_items'})
+
+export const selectItem = (id) => ({type: 'select_item', data:id})
+export const unselectItem = (id) => ({type: 'unselect_item', data:id})
 
 export const addPosts = (posts) => ({type: 'add_posts', data:posts})
 export const clearPosts = () => ({type: 'clear_posts'})
@@ -42,7 +52,13 @@ export const startLoadingPosts = () => {
   const countLoaded = (posts) => posts.length
   const transformLoaded = (posts) => {
 
+    //make sure every post has a url
+    posts = posts.filter(post => !! post.url)
+
     posts = posts.map(post => {
+      if (!post.market_links) 
+        post.market_links = []
+
       const idMatch = post.url.match(REGEX_POST_ID)
       const siteMatch = post.url.match(/https?:\/\/([^/]+)\//)
 
@@ -100,7 +116,7 @@ export const startLoadingItemSems = () => {
         console.log(`Malformed sem line:`, sem, line)
         throw new Error("Malformed sem record")
       }
-      line.id=line.url.match(REGEX_ITEM_ID)[0]
+      line.id=parseInt(line.url.match(REGEX_ITEM_ID)[0])
     }))
     return sems
   }

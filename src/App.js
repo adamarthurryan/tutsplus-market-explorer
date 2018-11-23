@@ -12,7 +12,7 @@ import CategoriesTable from './components/CategoriesTable'
 import ItemsTable from './components/ItemsTable'
 import Item from './components/Item'
 import LoadingState from './components/LoadingState'
-import PostFilterInput from './components/PostFilterInput'
+import PostSiteFilterInput from './components/PostSiteFilterInput'
 import Keyword from './components/Keyword'
 import KeywordsTable from './components/KeywordsTable'
 
@@ -31,7 +31,7 @@ class App extends Component {
         <div className="ui form ">
             <div className="fields">
               <QueryInput/>
-              <PostFilterInput/>
+              <PostSiteFilterInput/>
             </div>
             <LoadingState/>
         </div>
@@ -40,8 +40,8 @@ class App extends Component {
         <div className="ui top attached tabular menu">
           <NavLink className="item" activeClassName="active" to="/categories">Categories</NavLink>
           <NavLink className="item" activeClassName="active" to="/tags">Tags</NavLink>
-          <NavLink className="item" activeClassName="active" to="/items">All Items</NavLink>
-          <NavLink className="item" activeClassName="active" to="/posts">Promo Posts</NavLink>
+          <NavLink className="item" activeClassName="active" to="/items">Items</NavLink>
+          <NavLink className="item" activeClassName="active" to="/posts">Posts</NavLink>
           <NavLink className="item" activeClassName="active" to="/keywords">Keywords</NavLink>
 
         </div>
@@ -54,10 +54,10 @@ class App extends Component {
             <Route path="/tags" component={TagsTable}/>
             <Route path="/posts/:postId" component={Post}/>
             <Route path="/posts" component={PostsTable}/>
-            <Route path="/categories/:category/:subCategory/:subSubCategory/:subSubSubCategory" component={ItemsTable}/>
-            <Route path="/categories/:category/:subCategory/:subSubCategory" component={ItemsTable}/>
-            <Route path="/categories/:category/:subCategory" component={ItemsTable}/>
-            <Route path="/categories/:category" component={ItemsTable}/>
+            <Route path="/items/bycategory/:category/:subCategory/:subSubCategory/:subSubSubCategory" component={ItemsTable}/>
+            <Route path="/items/bycategory/:category/:subCategory/:subSubCategory" component={ItemsTable}/>
+            <Route path="/items/bycategory/:category/:subCategory" component={ItemsTable}/>
+            <Route path="/items/bycategory/:category" component={ItemsTable}/>
             <Route path="/categories" component={CategoriesTable}/>
             <Route path="/keywords/:keyword" component={Keyword}/>
             <Route path="/keywords" component={KeywordsTable}/>
@@ -66,7 +66,7 @@ class App extends Component {
             <Route path="/" component={ItemsTable}/>
           </Switch>
         </div>
-      
+
       </div>
   )}
 } 

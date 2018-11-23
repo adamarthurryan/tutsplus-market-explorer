@@ -17,7 +17,7 @@ async function fetchUrls (urls, index, processText, headers={}) {
 }
 
 
-async function fetchWithRetry(url, headers) {
+async function fetchWithRetry(url, headers={}) {
 	return fetch(url, {headers})
 		.then(response => {
 			if (response.ok)

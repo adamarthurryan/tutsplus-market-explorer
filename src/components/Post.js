@@ -22,7 +22,7 @@ class Post extends Component {
       if (post) {
         const itemsSearch = post.market_links
           .map(({id, url, text}) => (
-            {id, url, text, item: this.props.items.find(item => item.id == id)}
+            {id, url, text, item: this.props.items.find(item => item.id === parseInt(id))}
           ))
         const items = itemsSearch
           .filter( ({item}) => item !== undefined).map(({item}) => item)

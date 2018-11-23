@@ -4,14 +4,22 @@ import {connect} from 'react-redux'
 
 import VirtualizedTable from './VirtualizedTable'
 import {keywordParams} from './fieldParams'
+import * as Actions from '../actions'
 
-const fields = ['keyword', 'num_occurrences', 'number_of_results', 'average_vol', 'sum_traffic', 'max_pos' ]
+const fields = ['keyword', 'max_pos', 'number_of_results', 'average_vol', 'sum_traffic','num_occurrences'  ]
 
 
 const mapStateToProps = state => 
   Object.assign(
     state
   )
+
+
+const mapDispatchToProps = dispatch => ({
+  updateKeywordFilter: keyword=> dispatch(Actions.updateKeywordFilter(keyword)),
+  updateKeywordTypeFilter: keyword=> dispatch(Actions.updateKeywordTypeFilter(keyword)),
+})
+
 
 function firstFromItemOrPost(keyword, prop) {
 	if (keyword.itemSems.length > 0)
@@ -34,11 +42,39 @@ const min = (a,b) => Math.min(a,b)
 
 class KeywordsTable extends Component {
 
+    handleFilterChange(event) {
+      this.props.updateKeywordFilter(event.target.value)
+    }
+
+    handleFilterTypeChange(event) {
+      this.props.updateKeywordTypeFilter(event.target.value)
+    }
+
     render() {
 
-    	console.log( this.props.keywords[Object.keys(this.props.keywords)[0]])
-    	const keywords = Object.keys(this.props.keywords)
-    		.map(keyword => ({
+    	let keywords = Object.keys(this.props.keywords)
+
+      if (this.props.view.keywordFilter) {
+          keywords=keywords.filter(
+            keyword => keyword.toLowerCase().indexOf(this.props.view.keywordFilter.toLowerCase())>=0
+          )
+      }
+
+      if (this.props.view.keywordTypeFilter) {
+        keywords = keywords.filter( keyword => {
+          switch (this.props.view.keywordTypeFilter) {
+            case 'posts':
+              return this.props.keywords[keyword].postSems.length > 0
+            case 'items':
+              return this.props.keywords[keyword].itemSems.length > 0 
+            default:
+              return true
+          }
+        })
+      }
+
+
+    	keywords=keywords.map(keyword => ({
     			keyword,
     			num_occurrences: (this.props.keywords[keyword].itemSems.length + this.props.keywords[keyword].postSems.length),
     			number_of_results: firstFromItemOrPost(this.props.keywords[keyword], 'number_of_results'),
@@ -48,8 +84,31 @@ class KeywordsTable extends Component {
     		}))
     		.sort((a, b) => b.average_vol - a.average_vol)
 
-		return <VirtualizedTable fields={fields} fieldParams={keywordParams} data={keywords}/>
+		
+        return <div>
+          <div className="ui form ">
+            <div className="fields">
+              <div className="inline field">
+                <label>Filter</label>
+                <input value={this.props.view.keywordFilter} onChange={this.handleFilterChange.bind(this)}/>
+              </div>
+              <div className="inline field">
+                <input checked={this.props.view.keywordTypeFilter==='posts'} onChange={this.handleFilterTypeChange.bind(this)} type="radio" value="posts" id="posts-filter"/>
+                <label for="posts-filter">In Posts</label> 
+              </div>
+              <div className="inline field">
+                <input checked={this.props.view.keywordTypeFilter==='items'} onChange={this.handleFilterTypeChange.bind(this)} type="radio" value="items" id="items-filter"/>
+                <label for="items-filter">In Items</label> 
+              </div>
+              <div className="inline field">
+                <input checked={this.props.view.keywordTypeFilter===''} onChange={this.handleFilterTypeChange.bind(this)} type="radio" value="" id="all-filter"/>
+                <label for="all-filter">All</label> 
+              </div>
+            </div>
+          </div>
+          <VirtualizedTable fields={fields} fieldParams={keywordParams} data={keywords}/>
+        </div>
     }
 }
 
-export default connect(mapStateToProps)(KeywordsTable)
+export default connect(mapStateToProps, mapDispatchToProps)(KeywordsTable)

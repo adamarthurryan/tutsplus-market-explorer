@@ -23,10 +23,9 @@ import * as Actions from './actions'
 const store = Redux.createStore(
   Redux.combineReducers(reducers), 
   localStore.get(),
-  Redux.applyMiddleware(
+  Redux.compose(Redux.applyMiddleware(
   	thunkMiddleware,
-  //	window.devToolsExtension ? window.devToolsExtension() : undefined,
-  )
+  ))
 )
 
 
