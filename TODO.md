@@ -1,21 +1,32 @@
-Load and display metadata for posts and items:
+## Priority 1 ##
 
- - last time database was updated
- - total number of items
+- Scrape for Elements links
+- Integrate information on Elements items
+- Ability to select and export lists of items
+- Cluster keywords to show connections between posts
+- Filter items by recency of update
 
-Incremental loading of posts (since last scrape)
 
-Scrape for elements links
+## Priority 2 ##
+- Load and display metadata for posts and items:
+	- last time database was updated
+	- total number of items
 
-Sort tables by clicking column headers
+- Incremental loading of posts (since last scrape)
 
-Integrate keyword research / SEMRush data
+- Sort tables by clicking column headers
 
-Ability to select and export lists of items
+- Currently the flatfile database needs to be loaded entirely into memory on the server. Use a more sophisticated db that could be queried and loaded as needed.
 
-Currently the flatfile database needs to be loaded entirely into memory on the server. Use a more sophisticated db that could be queried and loaded as needed.
+- use a computed props with memoization library for computed data such as promotions per item, etc.
 
-Reset category/tag/item filter on load and tab switch?
+## Priority 3 ##
+
+- Reset category/tag/item filter on load and tab switch?
 	- maybe move these to local state instead of redux?
+	- or the filters could be in the url?
 
-Refactor filter code in each table component
+- Refactor filter code in table components
+	- show related keywords on keyword detail page
+	- list keyword clusters on keyword index page
+

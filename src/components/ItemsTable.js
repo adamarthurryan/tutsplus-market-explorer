@@ -8,7 +8,7 @@ import * as Actions from '../actions'
 //import {Autosizer, Table} from 'react-virtualized'
 import VirtualizedTable from './VirtualizedTable'
 
-const fields = [/*'selected',*/ 'name', 'site', 'classification', 'price_dollars', 'number_of_sales', 'trending', 'updated_at', "promotions"]
+const fields = ['name', 'site', 'classification', 'price_dollars', 'number_of_sales', 'trending', 'updated_at', "promotions"]
 
 
 const mapStateToProps = state => 
@@ -31,11 +31,11 @@ class ItemsTable extends Component {
 
     //called when any selection checkbox is clicked
     handleSelection(id, selected) {
-        console.log(id, selected)
         if (selected) 
             this.props.selectItem(id)
         else
             this.props.unselectItem(id)
+
         console.log(this.props.view.selections)
     }
 
@@ -74,10 +74,26 @@ class ItemsTable extends Component {
             )
         }
 
-
+/*        if (this.props.view.itemLastYearFilter) {
+            items=items.filter(
+                item => item.updated_at
+            )
+        }
+*/
         let itemsWithPromotions = items.map(item => Object.assign({}, item, {
             promotions: this.props.itemPosts[item.id]
         }))
+
+        let itemsWithSelections = itemsWithPromotions.map(item => Object.assign({}, item, {
+            selected: this.props.view.selections[item.id]
+        }))
+
+/*
+            <div className="inline field">
+                    <input type="checkbox" value={this.props.view.itemLastYearFilter?"":"true"} checked={this.props.view.itemLastYearFilter} id="last-year-filter" onChange={this.handleItemLastYearFilterChange.bind(this)}/>
+                    <label for="last-year-filter">Updated in Last Year Only?</label>
+                </div>
+*/
 
 		return <div>
             {categoryPath ? <h3>Category: {categoryPath}</h3>: null}
@@ -88,9 +104,10 @@ class ItemsTable extends Component {
                   <label>Filter</label>
                   <input value={this.props.view.itemNameFilter} onChange={this.handleFilterChange.bind(this)}/>
                 </div>
-              </div>
             </div>
-			<VirtualizedTable fields={fields} fieldParams={params} data={itemsWithPromotions}/>
+
+            </div>
+			<VirtualizedTable fields={fields} fieldParams={params} data={itemsWithSelections}/>
 		</div>
     }
 }

@@ -39,12 +39,16 @@ const itemParams = {
 const selectedParam = (selectionCallback) => {
 	return { selected: {label: " ", width: 25, render: (cellData, rowData) => {
 		let toggle = cellData
-		let changeHandler = (event)=> {
+		let changeHandler = (event) => {
+			console.log(toggle, !toggle)
 			toggle = ! toggle
 			selectionCallback(event.target.value, toggle)
 		}
 
-		return<input checked={cellData} onChange={changeHandler} type="checkbox" value={rowData.id}/> 
+		if (toggle)
+			return <input checked onChange={changeHandler} type="checkbox" value={rowData.id}/> 
+		else 
+			return <input  onChange={changeHandler} type="checkbox" value={rowData.id}/> 
 	} }
 	}
 }
