@@ -24,4 +24,5 @@ yarn-error.log*
 backend/secret/server-secret.js
 backend/secret/semrush-secret.js
 backend/secret/envato-secret.js
+backend/secret/trello-secret.js
 data/*

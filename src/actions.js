@@ -8,6 +8,7 @@ export const updatePostMarketLinksFilter = (filter) => ({type: 'change_post_mark
 export const updateCategoryNameFilter = (filter) => ({type: 'change_category_name_filter', data: filter})
 export const updateTagNameFilter = (filter) => ({type: 'change_tag_name_filter', data: filter})
 export const updateItemNameFilter = (filter) => ({type: 'change_item_name_filter', data: filter})
+export const updateItemLastYearFilter = (flag) => ({type: 'change_item_last_year_filter', data: flag})
 export const updateKeywordFilter = (filter) => ({type: 'change_keyword_filter', data: filter})
 export const updateKeywordTypeFilter = (filter) => ({type: 'change_keyword_type_filter', data: filter})
 export const updateQuerySite = (site) => ({type: 'change_query_site', data: site})

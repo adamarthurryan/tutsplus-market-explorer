@@ -79,6 +79,8 @@ export function view (state, action) {
       return Object.assign({}, state, {tagNameFilter:action.data})
     case 'change_item_name_filter':
       return Object.assign({}, state, {itemNameFilter:action.data})
+    case 'change_item_last_year_filter':
+      return Object.assign({}, state, {itemLastYearFilter:action.data})
     case 'change_keyword_filter':
       return Object.assign({}, state, {keywordFilter:action.data})
     case 'change_keyword_type_filter':
@@ -89,7 +91,7 @@ export function view (state, action) {
       const {[action.data]: oldValue, ...remaining} = state.selections 
       return Object.assign({}, state, {selections: remaining})
     default: 
-      return state || {tab:"", postSiteFilter:"", postMarketLinksFilter:"", postTitleFilter:"", categoryNameFilter:"", tagNameFilter:"", itemNameFilter:"", keywordFilter:"", keywordTypeFilter:"", selections:{}}
+      return state || {tab:"", postSiteFilter:"", postMarketLinksFilter:"", postTitleFilter:"", categoryNameFilter:"", tagNameFilter:"", itemNameFilter:"", itemLastYearFilter:"", keywordFilter:"", keywordTypeFilter:"", selections:{}}
   }
 }
 

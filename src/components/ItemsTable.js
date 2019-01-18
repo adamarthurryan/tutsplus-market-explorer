@@ -17,6 +17,7 @@ const mapStateToProps = state =>
   )
 const mapDispatchToProps = dispatch => ({
   updateItemNameFilter: title => dispatch(Actions.updateItemNameFilter(title)),
+  updateItemLastYearFilter: lastYear => dispatch(Actions.updateItemLastYearFilter(lastYear)),
   selectItem: id => dispatch(Actions.selectItem(id)),
   unselectItem: id => dispatch(Actions.unselectItem(id))
 })
@@ -27,6 +28,12 @@ class ItemsTable extends Component {
     //dispatch the redux action
     handleFilterChange(event) {
       this.props.updateItemNameFilter(event.target.value)
+    }
+
+    //called when the filter string is changed
+    //dispatch the redux action
+    handleItemLastYearFilterChange(event) {
+      this.props.updateItemLastYearFilter(event.target.value)
     }
 
     //called when any selection checkbox is clicked
@@ -88,12 +95,7 @@ class ItemsTable extends Component {
             selected: this.props.view.selections[item.id]
         }))
 
-/*
-            <div className="inline field">
-                    <input type="checkbox" value={this.props.view.itemLastYearFilter?"":"true"} checked={this.props.view.itemLastYearFilter} id="last-year-filter" onChange={this.handleItemLastYearFilterChange.bind(this)}/>
-                    <label for="last-year-filter">Updated in Last Year Only?</label>
-                </div>
-*/
+
 
 		return <div>
             {categoryPath ? <h3>Category: {categoryPath}</h3>: null}
@@ -104,7 +106,12 @@ class ItemsTable extends Component {
                   <label>Filter</label>
                   <input value={this.props.view.itemNameFilter} onChange={this.handleFilterChange.bind(this)}/>
                 </div>
-            </div>
+
+{/*                <div className="inline field">
+                    <label for="last-year-filter">Updated in Last Year Only?</label>
+                    <input type="checkbox" value={this.props.view.itemLastYearFilter?"":"true"} checked={this.props.view.itemLastYearFilter} id="last-year-filter" onChange={this.handleItemLastYearFilterChange.bind(this)}/>
+                </div>
+ */}           </div>
 
             </div>
 			<VirtualizedTable fields={fields} fieldParams={params} data={itemsWithSelections}/>
