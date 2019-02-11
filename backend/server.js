@@ -21,7 +21,7 @@ const loadPostsSemrushDatabase = require('./util/loadPostsSemrushDatabase')
 const loadItemsSemrushDatabase = require('./util/loadItemsSemrushDatabase')
 
 const app = express()
-const port = 8080
+const port = 8081
 
 
 let	posts
